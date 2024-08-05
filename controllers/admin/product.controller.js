@@ -115,12 +115,14 @@ module.exports.deleteItem= async (req,res)=>{
 };
 
 //[Get] /admin/products/create
-module.exports.create= (req,res)=>{
+module.exports.create= async (req,res)=>{
     //console.log("ok");
     res.render("admin/pages/products/create",{
         pageTitle:"Thêm mới sản phẩm",
     });
 };
+
+
 //[Post] /admin/products/create
 module.exports.createPost= async (req,res)=>{
     req.body.price=parseInt(req.body.price);
@@ -134,9 +136,6 @@ module.exports.createPost= async (req,res)=>{
     }
     else{
         req.body.position=parseInt(req.body.position);
-    }
-    if(req.file){
-        req.body.thumbnail=`/uploads/${req.file.filename}`;
     }
     const product=new Product(req.body);
     await product.save();
@@ -198,7 +197,7 @@ module.exports.detail= async (req,res)=>{
         const product= await Product.findOne(find);
         console.log(product);
         res.render("admin/pages/products/detail",{
-            pageTitle:"Chi tiết sản phẩm",
+            pageTitle:product.title,
             product:product
         });
     } catch (error) {
