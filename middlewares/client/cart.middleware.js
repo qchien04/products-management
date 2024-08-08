@@ -14,6 +14,12 @@ module.exports.cartId= async(req,res,next)=>{
         });
         req.cookies.cartId=cart.id;
     }else{
+        const cart= await Cart.findOne({
+            _id:req.cookies.cartId
+        });
+
+        cart.totalQuantity=cart.products.reduce((sum,item)=>item.quantity+sum,0);
+        res.locals.miniCart=cart;
 
     }
     next();
